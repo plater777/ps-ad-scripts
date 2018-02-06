@@ -28,7 +28,6 @@
 $users = Get-ADUser -Filter 'passwordneverexpires -eq "true"'
 $path = Read-Host -Prompt 'Ingresar la ruta absoluta y donde desea guardar el archivo CSV: '
 $fileName = Read-Host -Prompt 'Ingresar el nombre del archivo CSV: '
-" " | Export-Csv -Delimiter ";" -notype $path"\"$fileName
 
 #----------------------------------------------------------[Declaraciones]----------------------------------------------------------
 # Información del script
@@ -47,14 +46,13 @@ Function Write-Exception
 #-----------------------------------------------------------[Ejecución]------------------------------------------------------------
 try 
 {
-	
 	foreach ($user in $users)
 	{
 		if ($user.Enabled -eq "true")
 		{
 			if ($user.distinguishedname -notlike "*ventas*" -and $user.DistinguishedName -notlike "*sj*" -and $user.DistinguishedName -notlike "*vm*" -and $user.DistinguishedName -notlike "*pistolas*" -and $user.DistinguishedName -notlike "*remoto*" -and $user.DistinguishedName -notlike "*usuarios a*")
 			{
-				get-aduser -Identity $user.distinguishedname -Properties * | select samaccountname,CN,lastlogondate,passwordlastset,department,description,info,title | Export-Csv -Append -Force -Delimiter ";" -notype $path"\"$fileName
+				get-aduser -Identity $user.distinguishedname -Properties * | select samaccountname,CN,lastlogondate,passwordlastset,department,description,info,title | Export-Csv -Append -Delimiter ";" -notype $path"\"$fileName
 			}
 		}
 	}
